@@ -1,27 +1,24 @@
-require_relative '../lib/city'
+require_relative '../app/factories/city_factory'
 require 'minitest/autorun'
 
-describe City do
-  it 'can be created with individual arguments' do
-    City.new "Gotham", 304, 192, true
-  end
-
-  it 'cannot be created with no arguments' do
-    lambda {
-      City.new
-    }.must_raise ArgumentError
+describe CityFactory do
+  it 'can create cities with a data string' do
+    CityFactory.create "Omaha(NE)\t\t(367,209)"
   end
 
   it 'sets the city name' do
     omaha.name.must_equal "Omaha(NE)"
+    miami.name.must_equal "Miami(FL)"
   end
 
   it 'sets the city longitude' do
     omaha.longitude.must_equal 367
+    miami.longitude.must_equal 626
   end
 
   it 'sets the city latitude' do
     omaha.latitude.must_equal 209
+    miami.latitude.must_equal 443
   end
 
   it 'recognizes hub cities' do
@@ -31,10 +28,10 @@ describe City do
 
   private
   def omaha
-    @_omaha = City.new "Omaha(NE)", 367, 209, false
+    @_omaha = CityFactory.create "Omaha(NE)\t\t(367,209)"
   end
 
   def miami
-    @_miami = City.new "Miami(FL)", 626, 443, true
+    @_miami = CityFactory.create "*Miami(FL)\t\t(626,443)"
   end
 end
