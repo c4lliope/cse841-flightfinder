@@ -11,4 +11,10 @@ class City
   def hub?
     @hub
   end
+
+  def ==(other)
+    other.name == name &&
+    other.latitude == latitude &&
+    other.longitude == longitude
+  end
 end
