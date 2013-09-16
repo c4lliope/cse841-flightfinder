@@ -1,0 +1,225 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Homework 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</title>
+</head>
+
+<body>
+
+<center>
+<h1>Homework 1</h1> 
+</center><center>
+  <b>(Due:<font color="#FF0000"> Sunday </font>Sept. 29, 2013)</b>
+</center>  
+<p>Note that the due date is <font color="#FF0000">Sunday</font>.&nbsp; For electronic hand-in, use the `handin' web utility to submit      
+by <font color="#FF0000">11:59PM the due date</font>.&nbsp;     
+The hardcopy submission is due at the beginning of the class       
+the following Monday. Text by default: Weng.<br>     
+<hr width="90%">
+<h2>Part  1 Text Problem 2.10: (Total 60 points. Programming: 50 points; 5 conceptual questions: 10 points)</h2>     
+The map shown below is marked with 60 cities in the contiguous states of US.         
+Given any two cities, you need to compute the least cost path between them.         
+Implement the A* algorithm to compute the least cost path.<br>        
+&nbsp;
+<table BORDER="0" CELLPADDING="5" COLS="2" WIDTH="95%" NOSAVE>
+  <caption>　</caption>
+  <tbody>
+    <tr>
+      <td><br>
+  </tbody>
+  <tr NOSAVE>
+    <td NOSAVE>
+      <ul>
+        <li>The map is given just for your reference. It is not required in your     
+          program.</li>
+        <li>The list of all the cities shown in the map is given <a href="cities">here</a>.  
+          The coordinates given along with the cities are the x (horizontal) and  
+          y (vertical) distances from the top left corner. Multiply this  
+          distance by 4 to get the distance in miles.</li> 
+        <li>The cost of the flight ticket between any two cities is given in  
+          this <a href="flightCharges">table</a>.  
+          This is a 60x60 matrix and a value of 393 at position (1,2) indicates  
+          that the flight ticket from city 1 to city 2 costs $393. A `0' entry  
+          in the table denotes that there is no direct flight between the two  
+          cities.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+<p>The cities marked with an asterisk (*) in the city list are assumed to be hubs 
+of airlines. In addition to the cost of the flight ticket, you encounter a cost 
+for the time you spend for the travel. Use the following information to compute 
+the time taken for your trip.
+<ul>
+  <li>Assume the cruising speed of the airplane to be 450 miles per hour and 
+    allow 20 minutes for take-off and landing while computing the 
+    terminal-to-terminal time.</li>
+  <li>Assume the waiting time for a connection (or connection time) to be:</li>
+  <ul>
+    <li>1 hour for flights between two hub cities.</li>
+    <li>2 hours for flights between a hub city and a non-hub city.</li>
+    <li>3 hours for flights between two non-hub cities.</li>
+  </ul>
+  <li>Assume your time is worth <i>$<b>x</b></i> an hour. Your program should 
+    take this value as a command line argument.</li>
+</ul>
+<u>Input to the program</u>:
+<p>Your Linux program should use the syntax:<br>
+  <strong>findRoute start_city end_city cost_of_hour</strong><br>
+  <br>
+  If you use Matlab function, use the syntax <br>
+  <strong>findRoute(start_city, end_city, cost_of_hour)</strong><br>
+  <br>
+  where start_city and end_city are the integer codes of the cities and cost_of_hour is in dollars. Your program    
+should be named '<b>findRoute</b>'. 
+<p>For example, to run the     
+  program, one should be able to do: <br>
+  <b>findRoute&nbsp; 0&nbsp; 36&nbsp; 12.5</b>,     
+  <br>
+  where <b>0</b> is the origin city (Albany, NY), <b>36</b> is the destination     
+  city (Miami, FL), and your time is worth <b>$12.5</b> per hour. Note that the     
+  cities should be numbered 0 through 59.    
+<p>If you use Matlab, name your program findRoute.mat. I should be able to load your findRoute.mat and run <b>findRoute(0, 36, 12.5</b>) in the Matlab command window.
+<p><u>Output from the program</u>:
+<p>Your program should compute the least cost path (not the shortest or fastest) 
+from the origin to destination and output each of the legs of the route, with 
+the start and end times (terminal times) and the cost incurred for the leg 
+(include the connection time at the starting airport of the leg while computing 
+the cost). The output format of your program should be as follows:
+<p>&gt; <b>findRoute&nbsp; 0&nbsp; 36&nbsp; 12.5</b>    
+<ol>
+  <li>Albany(NY)&nbsp;&nbsp; -&nbsp; Boston(MA)&nbsp;&nbsp;&nbsp;&nbsp; 0:00&nbsp; 
+    0:55&nbsp;&nbsp;&nbsp;&nbsp; $85.35</li>   
+  <li>Boston(MA)&nbsp;&nbsp; -&nbsp; Atlanta(GA)&nbsp;&nbsp;&nbsp; 2:55&nbsp; 5:40&nbsp;&nbsp;&nbsp; 
+    $245.40</li>   
+  <li>Atlanta(GA)&nbsp; -&nbsp; Miami(FL)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6:40&nbsp; 
+    8:05&nbsp;&nbsp;&nbsp; $120.50</li>   
+</ol>
+&nbsp;&nbsp; Total Cost:&nbsp; $451.25        
+<p>&gt;
+<blockquote>
+  <p><u>Notes:</u>
+  </p>
+</blockquote>
+<ul>
+  <li>The output shown is not the actual result of the search. It is provided 
+    only to illustrate the <i>format</i> of the output.</li>
+  <li>The start and end times of each leg denote the departure and arrival times 
+    at the terminals. The connection time for the next flight should be used to 
+    compute the departure time of the next leg.</li>
+  <li>The cost of a leg includes the flight charges and the time spent in 
+    waiting for the flight and the terminal to terminal time of the flight.</li>
+</ul>
+<u>The heuristic function, h(n)</u>:
+<p>Use the following heuristic function for your program.
+<ul>
+  <li>h(n) = Distance <font face="Arial Narrow">x</font> least cost-per-mile + 
+    time cost <font face="Arial Narrow">x</font> (flight time + waiting time).</li>
+</ul>
+<ol>
+  <li>Distance = Euclidean distance between n and destination * 4. (to convert 
+    to miles).</li>
+  <li><i>Least cost per mile</i> = <b>Min</b>(Flight-cost/Distance) over all 
+    city pairs in the 60x60 table. Note that this quantity is a constant and can 
+    be computed even before you write your program.</li>
+  <li>F<i>light time</i> = (distance / cruising speed) + take-off and landing 
+    time.</li>
+  <li><i>Waiting time</i>: depends in type of origin city (n) and destination 
+    city of the flight.</li>
+</ol>
+<b><u>Grading Notes:</u></b>
+<ol>
+  <li>The programs will be compiled and tested on the cse server, <b>arctic</b>.</li>
+  <li>Any program that does not compile or run on arctic will receive <b>few</b> 
+    points.</li>
+  <li>If you use Linux, must provide the <b>makefile</b> for your program. To compile your program, I simply type make. 5 points will be 
+    deducted for not handing in a working makefile.</li>
+  <li><font color="black">Submit a README file that describes</font><font color="red"> how to compile and run your programs.</font> The first line: State what system do you use, Linux or Matlab.</li> 
+  <li>Use script utility to record one of your sample run and include the  
+    typescript (the default log file).<br>
+    <br>
+  </li> 
+</ol>
+<p><b><u>Electronic submission:<br>
+  <br>
+</u></b>First, read <a href="E-submission.txt">E-submission.txt</a>. Then submit the items explained in E_submission.txt.  In particular, submit the following items:</p>
+<ol>
+  <li>README.txt file</li>  
+  <li>If you use Linux commands, Makefile (your program must be compiled using only make)</li>
+  <li>Your source programs and all the other files that are needed to run your  
+    program</li>
+  <li>If you use Linux commands, the script file (<font color="red">use the t command script</font>) that records output, or Matlab complete output, for the following three examples:<br>
+    <strong>findRoute(0, 15, 10)<br>
+  findRoute(0, 15, 15)<br>
+  findRoute(47, 46, 10)
+    </strong><br>
+  </li>  
+</ol>
+<p><b><u>Hardcopy submission:</u></b></p>
+<ol>
+  <li>README.txt file</li> 
+  <li>Your source programs</li>
+  <li>The presentation file about your design as explained before</li>
+  <li>Script file of your tests using the above three examples that you constructed (or Matlab complete output)</li>
+  <li>The number of hours you spent on Part 1. </li>
+  <li>Your answers to the 5 conceptual questions in Problem 2.10 (10 points).</li>
+  <li><font color="red">Part 2: Questions 2 through 7</font></li>
+</ol>
+<hr width="90%">
+<h2>Part 2: Problems (40 pts)</h2>
+<ul style="MARGIN-TOP: 0in" type="disc">
+  <li class="MsoNormal" style="mso-list: l0 level1 lfo6; tab-stops: list .5in"><b>Question 2 (8 pts): Text problem 1.1
+      <o:p>
+&nbsp;</b></li>
+  <li class="MsoNormal"><b>Question 3 </b><b>(8 pts): Text problem 1.3
+      <o:p>
+  </b></li>
+  <li class="MsoNormal" style="mso-list: l0 level1 lfo6; tab-stops: list .5in"><b>Question 4 (8 pts): Text problem 1.5&nbsp;</b></li>  
+  <li class="MsoNormal" style="mso-list: l0 level1 lfo6; tab-stops: list .5in"><b>Question 5 (8 pts): Text problem 2.5</b></li>
+  <li class="MsoNormal"><b>Question 6 (8 pts): Text problem 2.8</b></li>
+  <li class="MsoNormal"><strong><b>Question</b> 7 (optional): Text problem 2.9</strong></li>
+</ul>
+<hr width="90%">
+<h2><u>FAQs</u></h2>
+<b>1.</b> What does the word 'destination' in the heuristics  refer to?         
+The final destination or the destination of the next flight?        
+<blockquote>
+  <b><i>Ans</i></b>: h(n) is supposed to be an optimistic estimate of the 
+  distance or cost to the goal state (or final destination). So it is not 
+  advisable to use the distance to the next city here.
+</blockquote>
+<p><br>
+<b>2.</b> 'Least cost per mile = Min(Flight-cost/Distance) over all city pairs 
+in the 60x60 table. Note that this quantity is a constant and can be computed 
+even before you write your program.' Does this mean the the cheapest flight in 
+dollars/mile of all the flights and there is only 1? Or does it mean the 
+cheapest destination for each flight, meaning there will be one for each city?
+<blockquote>
+  <b><i>Ans</i></b>: It is over all the flights and you will get a single value 
+  for the whole table. Do think about what we are trying to achieve with this 
+  measure.
+</blockquote>
+<p><br>
+<b>3.</b> The question says `allow 20 minutes for take-off and landing'. Is this 
+a total of 20 minutes or 20 minutes each?
+<blockquote>
+  <b><i>Ans</i></b>: It is a total of 20 minutes (10 + 10).
+</blockquote>
+<p><br>
+<b>4.</b> In the Heuristic, Flight time is defined as &quot;(distance / cruising 
+speed) + take-off and landing time&quot;. Now, does this distance mean the 
+straight line distance between 2 cities even if there is no flight between them? 
+Or do I need to make a special accommodation in the case of no direct flight?
+<blockquote>
+  <b><i>Ans</i></b>: Yes, it is the straight-line distance even if there is no 
+  direct flight between them. It is an optimistic estimate. One can definitely 
+  think of more complicated heuristics which better reflects the actual lowest 
+  cost. The heuristic given was made simple to make the programming easier.
+</blockquote>
+<p><br>
+</body>
+
+</html>
