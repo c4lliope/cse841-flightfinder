@@ -6,6 +6,14 @@ module CityFactory
     City.new name, longitude, latitude, hub?
   end
 
+  def self.import_from_file(filepath)
+    cities = []
+    IO.foreach(filepath) do |data|
+      cities.push create data
+    end
+    cities
+  end
+
   private
   module_function
 
