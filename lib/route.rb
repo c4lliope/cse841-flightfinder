@@ -25,6 +25,12 @@ class Route
     flights.map(&:time).reduce(&:+)
   end
 
+  def valid?
+    flight_origins = flights.map(&:origin)
+    flight_destinations = flights.map(&:destination)
+    flight_origins.drop(1) == flight_destinations[0...-1]
+  end
+
   private
 
   def first_flight

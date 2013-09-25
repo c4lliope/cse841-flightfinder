@@ -38,7 +38,32 @@ describe Route do
     end
   end
 
+  describe '#valid?' do
+    it 'returns false when flights do not line up' do
+      cities = 4.times.map { |n| city_named "City #{n}" }
+      flights = [flight_between(cities[0], cities[1]),
+                 flight_between(cities[2], cities[3])]
+      Route.new(flights).valid?.must_equal false
+    end
+
+    it 'returns true when flights line up' do
+      cities = 4.times.map { |n| city_named "City #{n}" }
+      flights = [flight_between(cities[0], cities[1]),
+                 flight_between(cities[1], cities[2]),
+                 flight_between(cities[2], cities[3])]
+      Route.new(flights).valid?.must_equal true
+    end
+  end
+
   private
+
+  def city_named name
+    City.new name, 0, 0, true
+  end
+
+  def flight_between origin, destination
+    Flight.new origin, destination, 0
+  end
 
   def route_time
     flights.map(&:time).reduce(&:+)
