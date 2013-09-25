@@ -12,11 +12,22 @@ describe Traveler do
 
   describe '#route' do
     it 'returns a valid route' do
-      skip
-      route.must_be_kind_of Route
+      route.valid?.must_equal true
+    end
+
+    it 'starts at the origin' do
       route.origin.must_equal origin
+    end
+
+    it 'ends at the destination' do
       route.destination.must_equal destination
-      route.must_be(&:valid?)
+    end
+
+    it "doesn't make up any flights" do
+      skip
+      route.flights.each do
+        |flight| flights.must_include flight
+      end
     end
   end
 
