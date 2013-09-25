@@ -32,7 +32,25 @@ describe Route do
     end
   end
 
+  describe '#time' do
+    it 'computes the correct total time' do
+      route.time.must_equal route_time
+    end
+  end
+
   private
+
+  def route_time
+    flights.map(&:time).reduce(&:+)
+  end
+
+  def total_flight_distance
+    flights.map(&:distance).reduce(&:+)
+  end
+
+  def flight_speed
+    Flight.average_speed
+  end
 
   def route
     @_route ||= Route.new flights

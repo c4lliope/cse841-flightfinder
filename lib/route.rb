@@ -10,7 +10,7 @@ class Route
   end
 
   def cost
-    flight_costs.reduce(&:+)
+    flights.map(&:cost).reduce(&:+)
   end
 
   def origin
@@ -21,10 +21,11 @@ class Route
     last_flight.destination
   end
 
-  private
-  def flight_costs
-    flights.map(&:cost)
+  def time
+    flights.map(&:time).reduce(&:+)
   end
+
+  private
 
   def first_flight
     flights.first
