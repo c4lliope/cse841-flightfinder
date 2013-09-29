@@ -35,15 +35,15 @@ class Traveler
   def evaluate city
     flights_from(city).each do |flight|
       neighbor = flight.destination
-      tentative_cost_to_get_to_neighbor = cost_to_get_to[city] + flight.distance
-      already_examined = evaluated?(neighbor) && tentative_cost_to_get_to_neighbor >= cost_to_get_to[neighbor]
+      cost_to_get_to_neighbor_from_current = cost_to_get_to[city] + flight.distance
+      already_examined = evaluated?(neighbor) && cost_to_get_to_neighbor_from_current >= cost_to_get_to[neighbor]
       if already_examined
         next
       end
 
-      if !unevaluated_cities.include?(neighbor) || tentative_cost_to_get_to_neighbor < cost_to_get_to[neighbor]
+      if !unevaluated_cities.include?(neighbor) || cost_to_get_to_neighbor_from_current < cost_to_get_to[neighbor]
         came_from[neighbor] = city
-        cost_to_get_to[neighbor] = tentative_cost_to_get_to_neighbor
+        cost_to_get_to[neighbor] = cost_to_get_to_neighbor_from_current
         estimated_total_cost_going_through[neighbor] = cost_to_get_to[neighbor] + heuristic_cost_estimate(neighbor, destination)
         add_to_unevaluated neighbor
       end

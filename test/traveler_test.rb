@@ -143,6 +143,21 @@ describe Traveler do
           |flight| flights.must_include flight
         end
       end
+      private
+
+      def origin
+        @_origin ||= cities.sample
+      end
+
+      def destination
+        @_destination ||= begin
+                            city = cities.sample
+                            until city != origin
+                              city = cities.sample
+                            end
+                            city
+                          end
+      end
     end
 
     private
