@@ -1,11 +1,12 @@
 require_relative 'route'
 
 class Traveler
-  def initialize(origin, destination, flights, hourly_rate)
+  def initialize(origin, destination, flights, hourly_rate, lowest_cost_per_mile)
     @origin = origin
     @destination = destination
     @flights = flights
     @hourly_rate = hourly_rate
+    @lowest_cost_per_mile = lowest_cost_per_mile
   end
 
   def route
@@ -36,7 +37,7 @@ class Traveler
     "%d:%02d" % [hours, minutes]
   end
 
-  attr_accessor :city_under_investigation, :hourly_rate
+  attr_accessor :city_under_investigation, :hourly_rate, :lowest_cost_per_mile
 
   def calculate_route
     until unevaluated_cities.empty?
@@ -113,7 +114,10 @@ class Traveler
   end
 
   def heuristic_cost_estimate(from, to)
-    100000000000
+    imaginary_flight = Flight.new(from, to, 0)
+
+    lowest_cost_per_mile * imaginary_flight.distance +
+      hourly_rate * imaginary_flight.time
   end
 
   def cities

@@ -2,10 +2,10 @@ require_relative '../../lib/flight'
 class FlightFactory
   def initialize(cities)
     @cities = cities
+    @flights = []
   end
 
   def import_from_file(path)
-    flights = []
     file = File.new path
     file.each { |line|
       origin_index = file.lineno - 1
@@ -18,8 +18,19 @@ class FlightFactory
     if file.lineno > cities.count
       raise 'Not enough cities provided.'
     end
-    flights
+    self
   end
+
+  def lowest_cost_per_mile
+    costs_per_mile = flights.map { |flight| cost_per_mile(flight) }
+    costs_per_mile.min
+  end
+
+  def cost_per_mile(flight)
+    flight.cost.to_f / flight.distance.to_f
+  end
+
+  attr_reader :flights
 
   private
   attr_accessor :cities

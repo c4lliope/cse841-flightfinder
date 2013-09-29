@@ -5,8 +5,8 @@ require_relative '../app/factories/city_factory'
 
 describe Traveler do
   describe '#new' do
-    it 'takes an origin and a destination, a list of flights, and an hourly rate' do
-      Traveler.new origin, destination, flights, hourly_rate
+    it 'takes an origin and a destination, a list of flights, an hourly rate, and the lowest cost per mile' do
+      Traveler.new origin, destination, flights, hourly_rate, lowest_cost_per_mile
     end
 
     def flights
@@ -48,7 +48,7 @@ describe Traveler do
       end
 
       def traveler
-        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
+        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate, lowest_cost_per_mile
       end
 
       def flights
@@ -99,7 +99,7 @@ describe Traveler do
       end
 
       def traveler
-        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
+        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate, lowest_cost_per_mile
       end
 
       def flights
@@ -167,11 +167,11 @@ describe Traveler do
     end
 
     def traveler
-      @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
+      @_traveler ||= Traveler.new origin, destination, flights, hourly_rate, lowest_cost_per_mile
     end
 
     def flights
-      @_flights ||= FlightFactory.new(cities).import_from_file('data/flights.txt')
+      @_flights ||= flight_factory.flights
     end
   end
 
@@ -185,6 +185,14 @@ describe Traveler do
 
   def cities
     @_cities ||= CityFactory.import_from_file('data/cities.txt')
+  end
+
+  def lowest_cost_per_mile
+    @_lowest_cost_per_mile ||= flight_factory.lowest_cost_per_mile
+  end
+
+  def flight_factory
+    @_flight_factory ||= FlightFactory.new(cities).import_from_file('data/flights.txt')
   end
 
   def hourly_rate

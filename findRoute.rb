@@ -18,7 +18,7 @@ class Program
   attr_reader :origin, :cities, :destination, :hourly_rate
 
   def traveler
-    @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
+    @_traveler ||= Traveler.new origin, destination, flights, hourly_rate, flight_factory.lowest_cost_per_mile
   end
 
   def cities
@@ -26,7 +26,11 @@ class Program
   end
 
   def flights
-    @_flights ||= FlightFactory.new(cities).import_from_file 'data/flights.txt'
+    flight_factory.flights
+  end
+
+  def flight_factory
+    @_flight_factory ||= FlightFactory.new(cities).import_from_file 'data/flights.txt'
   end
 end
 

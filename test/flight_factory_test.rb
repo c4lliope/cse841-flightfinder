@@ -49,7 +49,11 @@ describe FlightFactory do
 
     private
     def flights
-      @_flights ||= FlightFactory.new(cities).import_from_file 'data/flights.txt'
+      flight_factory.flights
+    end
+
+    def flight_factory
+      @_flight_factory ||= FlightFactory.new(cities).import_from_file 'data/flights.txt'
     end
 
     def cities
