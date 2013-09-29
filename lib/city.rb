@@ -16,5 +16,7 @@ class City
     other.name == name &&
     other.latitude == latitude &&
     other.longitude == longitude
+  rescue
+    false
   end
 end

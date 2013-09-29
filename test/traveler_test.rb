@@ -8,41 +8,160 @@ describe Traveler do
     it 'takes an origin and a destination, and a list of flights' do
       Traveler.new origin, destination, flights
     end
+
+    def flights
+      [Flight.new(origin, destination, cost)]
+    end
+    def cost
+      10
+    end
   end
 
   describe '#route' do
-    it 'returns a valid route' do
-      route.valid?.must_equal true
-    end
+    describe 'for a two-flight trip' do
+      it 'finds a valid route' do
+        route.valid?.must_equal true
+      end
 
-    it 'starts at the origin' do
-      route.origin.must_equal origin
-    end
+      it 'starts at the origin' do
+        route.origin.must_equal origin
+      end
 
-    it 'ends at the destination' do
-      route.destination.must_equal destination
-    end
+      it 'ends at the destination' do
+        route.destination.must_equal destination
+      end
 
-    it "doesn't make up any flights" do
-      skip
-      route.flights.each do
-        |flight| flights.must_include flight
+      it "only uses the provided flights" do
+        route.flights.each do
+          |flight| flights.must_include flight
+        end
+      end
+
+      it 'only uses two flights' do
+        route.flights.count.must_equal 2
+      end
+
+      private
+
+      def route
+        @_route ||= traveler.route
+      end
+
+      def traveler
+        @_traveler ||= Traveler.new origin, destination, flights
+      end
+
+      def flights
+        @_flights ||= [
+          Flight.new(intermediate, destination, cost),
+          Flight.new(origin, cities.sample, cost),
+          Flight.new(origin, intermediate, cost),
+          Flight.new(cities.sample, cities.sample, cost),
+          Flight.new(cities.sample, destination, cost),
+        ]
+      end
+
+      def intermediate
+        @_intermediate ||= cities.sample
+      end
+
+      def valid_flight
+        Flight.new(origin, destination, cost)
+      end
+
+      def cost
+        10
       end
     end
-  end
 
-  private
+    describe 'for a one-flight trip' do
+      it 'finds a valid route' do
+        route.valid?.must_equal true
+      end
 
-  def route
-    traveler.route
-  end
+      it 'starts at the origin' do
+        route.origin.must_equal origin
+      end
 
-  def traveler
-    @_traveler ||= Traveler.new origin, destination, flights
-  end
+      it 'ends at the destination' do
+        route.destination.must_equal destination
+      end
 
-  def flights
-    @_flights ||= FlightFactory.new(cities).import_from_file('data/flights.txt')
+      it "only uses the provided flights" do
+        route.flights.each do
+          |flight| flights.must_include flight
+        end
+      end
+
+      it 'only uses one flight' do
+        route.flights.count.must_equal 1
+      end
+
+      private
+
+      def route
+        @_route ||= traveler.route
+      end
+
+      def traveler
+        @_traveler ||= Traveler.new origin, destination, flights
+      end
+
+      def flights
+        @_flights ||= [
+          Flight.new(origin, cities.sample, cost),
+          valid_flight,
+          Flight.new(cities.sample, cities.sample, cost),
+          Flight.new(cities.sample, destination, cost),
+        ]
+      end
+
+      def valid_flight
+        Flight.new(origin, destination, cost)
+      end
+
+      def cost
+        10
+      end
+    end
+
+    describe 'for longer trips' do
+      it 'returns a valid route' do
+        skip
+        route.valid?.must_equal true
+      end
+
+      it 'starts at the origin' do
+        skip
+        route.origin.must_equal origin
+      end
+
+      it 'ends at the destination' do
+        skip
+        route.destination.must_equal destination
+      end
+
+      it "only uses the provided flights" do
+        skip
+        route.flights.each do
+          |flight| flights.must_include flight
+        end
+      end
+    end
+
+    private
+
+    def route
+      @_route ||= traveler.route
+    end
+
+    def traveler
+      @_traveler ||= Traveler.new origin, destination, flights
+    end
+
+    def flights
+      @_flights ||= FlightFactory.new(cities).import_from_file('data/flights.txt')
+    end
   end
 
   def origin
