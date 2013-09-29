@@ -8,7 +8,11 @@ class Flight
   attr_accessor :origin, :destination, :cost
 
   def time
-    air_time + runway_time + layover_time
+    transit_time + layover_time
+  end
+
+  def transit_time
+    air_time + runway_time
   end
 
   def distance

@@ -17,16 +17,23 @@ class Traveler
     time_minutes = 0
     route.flights.each_with_index do |flight, index|
       flight_start_time = time_minutes
-      flight_end_time = time_minutes + flight.time * 60
-      output += "#{index+1}. #{flight}\t#{flight_start_time.to_i} #{flight_end_time.to_i} #{money_format cost_for(flight)}\n"
+      flight_end_time = time_minutes + flight.transit_time * 60
+      output += "#{index+1}. #{flight}\t#{time_format flight_start_time} #{time_format flight_end_time} #{money_format cost_for(flight)}\n"
+      time_minutes += flight.time * 60
     end
-    output.to_s + "\nTotal Cost: #{money_format cost_for(route)}"
+    output.to_s + "\nTotal Cost: #{money_format cost_for(route)}\n\n"
   end
 
   private
 
   def money_format number
     "$%.2f" % number
+  end
+
+  def time_format minutes
+    hours = (minutes / 60).to_i
+    minutes = (minutes.to_i) % 60
+    "%d:%02d" % [hours, minutes]
   end
 
   attr_accessor :city_under_investigation, :hourly_rate
