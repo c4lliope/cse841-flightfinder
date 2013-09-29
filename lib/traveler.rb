@@ -1,17 +1,35 @@
+require_relative 'route'
+
 class Traveler
-  def initialize(origin, destination, flights)
+  def initialize(origin, destination, flights, hourly_rate)
     @origin = origin
     @destination = destination
     @flights = flights
+    @hourly_rate = hourly_rate
   end
 
   def route
     @_route ||= calculate_route
   end
 
+  def to_s
+    output = "\n"
+    time_minutes = 0
+    route.flights.each_with_index do |flight, index|
+      flight_start_time = time_minutes
+      flight_end_time = time_minutes + flight.time * 60
+      output += "#{index+1}. #{flight}\t#{flight_start_time.to_i} #{flight_end_time.to_i} #{money_format cost_for(flight)}\n"
+    end
+    output.to_s + "\nTotal Cost: #{money_format cost_for(route)}"
+  end
+
   private
 
-  attr_accessor :city_under_investigation
+  def money_format number
+    "$%.2f" % number
+  end
+
+  attr_accessor :city_under_investigation, :hourly_rate
 
   def calculate_route
     until unevaluated_cities.empty?
@@ -35,9 +53,8 @@ class Traveler
   def evaluate city
     flights_from(city).each do |flight|
       neighbor = flight.destination
-      cost_to_get_to_neighbor_from_current = cost_to_get_to[city] + flight.distance
-      already_examined = evaluated?(neighbor) && cost_to_get_to_neighbor_from_current >= cost_to_get_to[neighbor]
-      if already_examined
+      cost_to_get_to_neighbor_from_current = cost_to_get_to[city] + cost_for(flight)
+      if evaluated?(neighbor) && cost_to_get_to_neighbor_from_current >= cost_to_get_to[neighbor]
         next
       end
 
@@ -96,12 +113,8 @@ class Traveler
     @_cities ||= flights.map(&:origin) + flights.map(&:destination)
   end
 
-  def cost_for_route route
-    route.cost + route.time * cost_per_hour
-  end
-
-  def cost_per_hour
-    12
+  def cost_for trip
+    trip.cost + trip.time * hourly_rate
   end
 
   def flights_from(city)

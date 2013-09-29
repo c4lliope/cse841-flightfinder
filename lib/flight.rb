@@ -19,6 +19,10 @@ class Flight
     3 - number_of_hub_cities
   end
 
+  def to_s
+    "#{origin.name} - #{destination.name}"
+  end
+
   private
 
   def number_of_hub_cities

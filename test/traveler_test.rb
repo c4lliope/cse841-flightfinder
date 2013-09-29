@@ -5,8 +5,8 @@ require_relative '../app/factories/city_factory'
 
 describe Traveler do
   describe '#new' do
-    it 'takes an origin and a destination, and a list of flights' do
-      Traveler.new origin, destination, flights
+    it 'takes an origin and a destination, a list of flights, and an hourly rate' do
+      Traveler.new origin, destination, flights, hourly_rate
     end
 
     def flights
@@ -48,7 +48,7 @@ describe Traveler do
       end
 
       def traveler
-        @_traveler ||= Traveler.new origin, destination, flights
+        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
       end
 
       def flights
@@ -99,7 +99,7 @@ describe Traveler do
       end
 
       def traveler
-        @_traveler ||= Traveler.new origin, destination, flights
+        @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
       end
 
       def flights
@@ -152,7 +152,7 @@ describe Traveler do
       def destination
         @_destination ||= begin
                             city = cities.sample
-                            until city != origin
+                            while city == origin
                               city = cities.sample
                             end
                             city
@@ -167,7 +167,7 @@ describe Traveler do
     end
 
     def traveler
-      @_traveler ||= Traveler.new origin, destination, flights
+      @_traveler ||= Traveler.new origin, destination, flights, hourly_rate
     end
 
     def flights
@@ -185,5 +185,9 @@ describe Traveler do
 
   def cities
     @_cities ||= CityFactory.import_from_file('data/cities.txt')
+  end
+
+  def hourly_rate
+    12.5
   end
 end

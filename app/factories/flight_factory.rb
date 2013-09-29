@@ -1,3 +1,4 @@
+require_relative '../../lib/flight'
 class FlightFactory
   def initialize(cities)
     @cities = cities
