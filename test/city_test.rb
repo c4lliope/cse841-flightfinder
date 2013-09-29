@@ -29,7 +29,17 @@ describe City do
     miami.hub?.must_equal true
   end
 
+  it 'calculates the distance between cities correctly' do
+    omaha.distance_to(miami).must_equal distance(omaha, miami)
+    miami.distance_to(omaha).must_equal distance(omaha, miami)
+  end
+
   private
+
+  def distance(a, b)
+    Math.sqrt((a.latitude - b.latitude)**2 + (a.longitude - b.longitude)**2) * 4
+  end
+
   def omaha
     @_omaha = City.new "Omaha(NE)", 367, 209, false
   end
