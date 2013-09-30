@@ -1,3 +1,2 @@
-all:
-	# All done! You're ready to run './findRoute ...'
-
+findFlight:
+	tar -xzf findRoute.tar.gz
